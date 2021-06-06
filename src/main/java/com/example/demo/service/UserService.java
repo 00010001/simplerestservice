@@ -7,6 +7,8 @@ import com.example.demo.model.exception.NotReadableException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.math.RoundingMode;
 
 @Service
 public class UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final ObjectMapper objectMapper;
     private final GithubClient githubClient;
@@ -29,6 +33,7 @@ public class UserService {
     }
 
     public User getUser(String login) {
+        logger.info("Getting user with login [{}]", login);
         requestCountService.increment(login);
         var githubUser = fetchGithubUser(login);
         validateFollowers(githubUser);
